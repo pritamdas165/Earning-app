@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Rewarder Ultra Pro - Feature Packed</title>
+    <title>Rewarder Ultra Pro - The Giant Platform</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
@@ -22,181 +22,244 @@
         .nav-active { color: #818cf8; transform: translateY(-4px); text-shadow: 0 0 15px rgba(129, 140, 248, 0.6); }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         
-        /* Scratch Card Styling */
-        .scratch-container { position: relative; width: 280px; height: 150px; background: #1e1b4b; border-radius: 20px; overflow: hidden; margin: 0 auto; }
-        .scratch-overlay { position: absolute; inset: 0; background: #475569; z-index: 10; display: flex; align-items: center; justify-content: center; font-weight: 800; color: #94a3b8; cursor: pointer; transition: opacity 0.5s; }
-        .scratch-content { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-
+        /* Scratch Card */
+        .scratch-container { position: relative; width: 280px; height: 160px; background: #1e1b4b; border-radius: 24px; overflow: hidden; margin: 0 auto; }
+        .scratch-overlay { position: absolute; inset: 0; background: #475569; z-index: 10; display: flex; align-items: center; justify-content: center; font-weight: 800; color: #cbd5e1; cursor: pointer; transition: opacity 0.5s; }
+        
         @keyframes slideLeft { 0% { transform: translateX(100%); } 100% { transform: translateX(-150%); } }
         .payout-ticker { animation: slideLeft 25s linear infinite; white-space: nowrap; }
+        
         #wheel { transition: transform 4s cubic-bezier(0.15, 0, 0.15, 1); }
+        .task-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        
+        /* Progress Ring */
+        .progress-ring { transform: rotate(-90deg); }
+        .progress-ring-circle { transition: stroke-dashoffset 0.3s; stroke-dasharray: 100 100; stroke-dashoffset: 100; }
     </style>
 </head>
 <body class="min-h-screen">
 
-    <!-- Splash/Auth Screen -->
+    <!-- Splash/Auth -->
     <div id="splash" class="fixed inset-0 z-[1000] bg-slate-950 flex flex-col items-center justify-center transition-opacity duration-700">
-        <div class="relative w-32 h-32 mb-8 animate-pulse">
-            <div class="absolute inset-0 bg-indigo-600 rounded-full blur-3xl opacity-30"></div>
-            <img src="https://cdn-icons-png.flaticon.com/512/10459/10459345.png" class="relative w-full h-full object-contain">
+        <div class="relative w-32 h-32 mb-8">
+            <div class="absolute inset-0 bg-indigo-600 rounded-full blur-3xl opacity-30 animate-pulse"></div>
+            <i class="fas fa-gem text-indigo-500 text-7xl relative"></i>
         </div>
-        <h1 class="text-3xl font-black tracking-tighter uppercase italic text-white text-center">Rewarder <br><span class="text-indigo-500">MAX PRO</span></h1>
+        <h1 class="text-3xl font-black tracking-tighter uppercase italic text-center">Rewarder <br><span class="text-indigo-500 tracking-[0.3em]">ULTRA PRO</span></h1>
         
-        <div id="auth-controls" class="mt-16 w-full max-w-xs px-6 hidden">
-            <button onclick="loginWithGoogle()" class="w-full bg-white text-black py-4 rounded-[2rem] font-bold flex items-center justify-center space-x-3 active:scale-95 transition-all shadow-2xl">
-                <i class="fab fa-google text-red-500 text-xl"></i>
-                <span>Sign in with Google</span>
+        <div id="auth-controls" class="mt-16 w-full max-w-xs px-6 hidden text-center">
+            <button onclick="loginWithGoogle()" class="w-full bg-white text-black py-4 rounded-[2rem] font-bold flex items-center justify-center space-x-3 active:scale-95 shadow-2xl">
+                <i class="fab fa-google text-red-500"></i>
+                <span>Continue with Google</span>
             </button>
+            <p class="text-[10px] text-slate-500 mt-6 font-bold tracking-widest uppercase">Safe & Secure Payment</p>
         </div>
     </div>
 
-    <!-- Onboarding: Referral -->
-    <div id="modal-referral-setup" class="fixed inset-0 z-[1100] bg-slate-950 hidden flex flex-col items-center justify-center p-8">
+    <!-- Onboarding Referral -->
+    <div id="modal-referral-setup" class="fixed inset-0 z-[1100] bg-slate-950 hidden flex flex-col items-center justify-center p-8 backdrop-blur-3xl">
         <div class="glass p-10 rounded-[3.5rem] w-full max-w-sm text-center">
-            <h2 class="text-2xl font-black mb-2 uppercase italic">Claim Welcome</h2>
-            <p class="text-slate-400 text-xs mb-10">Enter a friend's code to get <span class="text-gold font-bold">100 Coins</span>!</p>
+            <h2 class="text-2xl font-black mb-4 uppercase italic">Claim Welcome</h2>
+            <p class="text-slate-400 text-xs mb-10">Use a referral code to start with <span class="text-gold font-bold">100 Coins</span>!</p>
             <input type="text" id="input-referral-code" placeholder="6-DIGIT CODE" class="w-full bg-slate-900 border border-white/10 p-5 rounded-2xl mb-6 text-center text-white font-black uppercase outline-none focus:border-indigo-500">
-            <button onclick="completeOnboarding()" class="w-full btn-gold py-5 rounded-2xl font-black text-lg mb-4">Claim Bonus</button>
+            <button onclick="completeOnboarding()" class="w-full btn-gold py-5 rounded-2xl font-black mb-4">Get Bonus</button>
             <button onclick="completeOnboarding(true)" class="text-slate-500 text-xs font-bold uppercase">Skip</button>
         </div>
     </div>
 
-    <!-- Main Container -->
-    <div id="app" class="hidden flex-col w-full max-w-md mx-auto min-h-screen pb-32 pt-10">
+    <!-- Main App Content -->
+    <div id="app" class="hidden flex-col w-full max-w-md mx-auto min-h-screen pb-32 pt-12">
         
         <!-- Header -->
-        <header class="px-6 py-4 flex justify-between items-center sticky top-0 z-50 bg-slate-950/80 backdrop-blur-xl">
+        <header class="px-6 py-4 flex justify-between items-center sticky top-0 z-50 bg-slate-950/80 backdrop-blur-xl border-b border-white/5">
             <div class="flex items-center space-x-3">
-                <img src="" id="user-avatar" class="w-12 h-12 rounded-2xl bg-slate-800 p-1 border border-white/10">
+                <div class="relative">
+                    <img src="" id="user-avatar" class="w-12 h-12 rounded-2xl bg-slate-800 p-1 border border-white/10">
+                    <div class="absolute -bottom-1 -right-1 bg-green-500 w-3.5 h-3.5 rounded-full border-4 border-slate-950"></div>
+                </div>
                 <div>
-                    <h3 class="text-sm font-black tracking-tight" id="disp-name">User</h3>
-                    <p class="text-[9px] text-indigo-400 font-bold uppercase tracking-widest" id="user-badge">Bronze Member</p>
+                    <h3 class="text-xs font-black" id="disp-name">User</h3>
+                    <div class="flex items-center space-x-2">
+                        <span class="text-[8px] bg-indigo-600/20 text-indigo-400 px-1.5 py-0.5 rounded font-black uppercase">LVL <span id="lvl">1</span></span>
+                        <div class="w-14 h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                            <div id="xp-bar" class="h-full bg-indigo-500" style="width: 0%"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="flex flex-col items-end">
-                <div class="bg-indigo-600/10 px-5 py-2 rounded-2xl border border-indigo-500/20 flex items-center space-x-2">
-                    <i class="fas fa-coins text-gold text-sm"></i>
-                    <span id="balance" class="font-black text-white text-sm">0</span>
-                </div>
+            <div class="flex items-center space-x-2 bg-slate-900 px-4 py-2 rounded-2xl border border-white/5 shadow-inner">
+                <i class="fas fa-coins text-gold text-xs"></i>
+                <span id="balance" class="font-black text-white text-xs">0</span>
             </div>
         </header>
 
+        <!-- Dynamic Content Area -->
         <div id="content-area" class="px-6 space-y-8 pt-4">
             
-            <!-- VIEW: HOME -->
+            <!-- HOME VIEW -->
             <div id="view-home" class="view space-y-8">
-                <!-- Promo Code Box -->
-                <div class="glass p-5 rounded-3xl flex space-x-2 border-dashed border-2 border-white/10">
-                    <input type="text" id="promo-input" placeholder="Have Promo Code?" class="flex-1 bg-transparent text-xs font-bold uppercase outline-none px-2">
-                    <button onclick="applyPromoCode()" class="bg-indigo-600 px-4 py-2 rounded-xl text-[10px] font-black uppercase">Apply</button>
-                </div>
-
-                <!-- Daily Loot -->
-                <div class="glass p-6 rounded-[2.5rem] bg-gradient-to-br from-indigo-500/20 to-transparent flex justify-between items-center">
-                    <div>
-                        <h2 class="text-xl font-black italic uppercase">Daily Streak</h2>
-                        <p class="text-[10px] text-slate-400 font-bold uppercase">Claim 7 days for +500</p>
+                <!-- Status Stats -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="glass p-5 rounded-3xl border-b-2 border-indigo-500/50">
+                        <p class="text-[9px] text-slate-500 font-black uppercase tracking-widest">Tasks Done</p>
+                        <h4 class="text-lg font-black" id="done-count">0/50</h4>
                     </div>
-                    <button id="daily-claim-btn" onclick="claimDaily()" class="btn-gold px-8 py-3 rounded-2xl text-[10px] font-black uppercase">Claim</button>
+                    <div class="glass p-5 rounded-3xl border-b-2 border-emerald-500/50">
+                        <p class="text-[9px] text-slate-500 font-black uppercase tracking-widest">Est. Earnings</p>
+                        <h4 class="text-lg font-black text-emerald-400">₹<span id="est-earning">0.00</span></h4>
+                    </div>
                 </div>
 
-                <!-- Offers -->
+                <!-- Daily Checkin -->
+                <div class="glass p-6 rounded-[2.5rem] bg-gradient-to-br from-indigo-500/10 to-transparent flex justify-between items-center">
+                    <div>
+                        <h2 class="text-lg font-black italic uppercase">Daily Reward</h2>
+                        <p class="text-[10px] text-slate-400 font-bold uppercase" id="streak-info">Day 1 / 7 Streak</p>
+                    </div>
+                    <button id="daily-claim-btn" onclick="claimDaily()" class="btn-gold px-6 py-2.5 rounded-2xl text-[10px] font-black uppercase">Claim</button>
+                </div>
+
+                <!-- Offerwall Tabs -->
                 <div class="space-y-4">
-                    <h3 class="text-[11px] font-black text-slate-500 uppercase tracking-widest px-1">Active Offerwall</h3>
+                    <div class="flex space-x-2 overflow-x-auto no-scrollbar pb-1">
+                        <button onclick="renderTasks('video')" class="task-tab-btn bg-indigo-600 px-5 py-2 rounded-xl text-[10px] font-black uppercase">Video Ads</button>
+                        <button onclick="renderTasks('social')" class="task-tab-btn bg-slate-900 text-slate-500 px-5 py-2 rounded-xl text-[10px] font-black uppercase">Social</button>
+                        <button onclick="renderTasks('web')" class="task-tab-btn bg-slate-900 text-slate-500 px-5 py-2 rounded-xl text-[10px] font-black uppercase">Web Visit</button>
+                    </div>
                     <div id="task-list" class="space-y-4 pb-4"></div>
                 </div>
             </div>
 
-            <!-- VIEW: GAMES -->
+            <!-- GAMES VIEW -->
             <div id="view-games" class="view hidden space-y-6">
-                <h3 class="text-[11px] font-black text-slate-500 uppercase tracking-widest px-1 text-center">Interactive Games</h3>
+                <h3 class="text-[10px] font-black text-slate-500 uppercase tracking-widest text-center">Interactive Arcade</h3>
                 <div class="grid grid-cols-2 gap-4">
-                    <div onclick="openGame('spin')" class="glass p-8 rounded-[2.5rem] text-center active:scale-95 transition-all border-b-4 border-indigo-600/50">
+                    <div onclick="openGame('spin')" class="task-card glass p-8 rounded-[2.5rem] text-center active:scale-95 border-b-4 border-indigo-600/50">
                         <i class="fas fa-dharmachakra text-indigo-500 text-4xl mb-4"></i>
-                        <h4 class="text-xs font-black uppercase">Spin Win</h4>
+                        <h4 class="text-xs font-black uppercase">Lucky Spin</h4>
                     </div>
-                    <div onclick="openGame('scratch')" class="glass p-8 rounded-[2.5rem] text-center active:scale-95 transition-all border-b-4 border-yellow-600/50">
+                    <div onclick="openGame('scratch')" class="task-card glass p-8 rounded-[2.5rem] text-center active:scale-95 border-b-4 border-yellow-600/50">
                         <i class="fas fa-hand-sparkles text-yellow-500 text-4xl mb-4"></i>
                         <h4 class="text-xs font-black uppercase">Scratch</h4>
                     </div>
-                    <div onclick="openGame('math')" class="glass p-8 rounded-[2.5rem] text-center active:scale-95 transition-all border-b-4 border-emerald-600/50">
+                    <div onclick="openGame('dice')" class="task-card glass p-8 rounded-[2.5rem] text-center active:scale-95 border-b-4 border-red-600/50">
+                        <i class="fas fa-dice text-red-500 text-4xl mb-4"></i>
+                        <h4 class="text-xs font-black uppercase">Dice Roll</h4>
+                    </div>
+                    <div onclick="openGame('math')" class="task-card glass p-8 rounded-[2.5rem] text-center active:scale-95 border-b-4 border-emerald-600/50">
                         <i class="fas fa-brain text-emerald-500 text-4xl mb-4"></i>
-                        <h4 class="text-xs font-black uppercase">Quiz</h4>
+                        <h4 class="text-xs font-black uppercase">Math Quiz</h4>
                     </div>
                 </div>
             </div>
 
-            <!-- VIEW: PROFILE & SUPPORT -->
+            <!-- PROFILE/REFER VIEW -->
             <div id="view-profile" class="view hidden space-y-8">
                 <div class="glass p-8 rounded-[3rem] text-center border-t-4 border-indigo-500/20">
-                    <h2 class="text-2xl font-black uppercase italic mb-4">Refer Friends</h2>
-                    <p class="text-xs text-slate-400 mb-6">Referral code: <span id="ref-code" class="text-white font-black tracking-widest">---</span></p>
-                    <button onclick="copyRef()" class="btn-gold w-full py-4 rounded-2xl font-black text-xs uppercase">Copy & Invite</button>
+                    <i class="fas fa-users-crown text-gold text-5xl mb-6"></i>
+                    <h2 class="text-2xl font-black uppercase italic mb-4">Refer & Earn</h2>
+                    <p class="text-xs text-slate-400 mb-8 px-4">Refer friends to get <span class="text-white font-bold">500 Coins</span> per join!</p>
+                    <div class="bg-slate-900 border border-white/5 p-5 rounded-3xl flex items-center justify-between mb-4">
+                        <span id="ref-code" class="font-black text-indigo-500 text-lg tracking-[0.2em]">LOADING</span>
+                        <button onclick="copyRef()" class="bg-indigo-600 px-5 py-2 rounded-xl text-[10px] font-black uppercase">Copy</button>
+                    </div>
                 </div>
-                
-                <div class="grid grid-cols-2 gap-4">
-                    <a href="https://t.me/yourlink" class="glass p-6 rounded-3xl text-center">
-                        <i class="fab fa-telegram text-blue-400 text-2xl mb-2"></i>
-                        <h4 class="text-[10px] font-black uppercase">Telegram</h4>
-                    </a>
-                    <a href="mailto:support@app.com" class="glass p-6 rounded-3xl text-center">
-                        <i class="fas fa-headset text-indigo-400 text-2xl mb-2"></i>
-                        <h4 class="text-[10px] font-black uppercase">Support</h4>
-                    </a>
+                <div class="grid grid-cols-2 gap-4 text-center">
+                    <a href="https://t.me/yourlink" class="glass p-5 rounded-3xl"><i class="fab fa-telegram text-blue-400 text-2xl mb-2"></i><p class="text-[9px] font-black uppercase">Official Group</p></a>
+                    <a href="mailto:support@app.com" class="glass p-5 rounded-3xl"><i class="fas fa-headset text-indigo-400 text-2xl mb-2"></i><p class="text-[9px] font-black uppercase">Contact Support</p></a>
                 </div>
             </div>
 
-            <!-- VIEW: WALLET -->
+            <!-- WALLET VIEW -->
             <div id="view-wallet" class="view hidden space-y-8">
-                <div class="glass p-10 rounded-[3.5rem] text-center shadow-2xl relative overflow-hidden border-t-4 border-indigo-500/20">
-                    <p class="text-slate-500 text-[11px] font-black uppercase mb-4 tracking-[0.4em]">Available Cash</p>
+                <div class="glass p-10 rounded-[3.5rem] text-center shadow-2xl relative overflow-hidden">
+                    <p class="text-slate-500 text-[10px] font-black uppercase mb-4 tracking-[0.3em]">Net Earnings</p>
                     <h2 class="text-7xl font-black tracking-tighter mb-10">₹<span id="cash">0.00</span></h2>
-                    <button id="withdraw-btn" onclick="openPayoutModal()" class="w-full py-6 rounded-[2.5rem] bg-slate-900 text-slate-600 font-black text-sm uppercase tracking-widest">Withdraw (Min ₹20)</button>
+                    <button id="withdraw-btn" onclick="openPayoutModal()" class="w-full py-6 rounded-[2.5rem] bg-slate-900 text-slate-600 font-black text-sm uppercase tracking-widest shadow-xl">Min. Withdraw ₹20</button>
+                </div>
+                
+                <div class="glass p-6 rounded-3xl">
+                    <h4 class="text-[10px] font-black text-slate-500 uppercase mb-4 tracking-widest">Payment Status</h4>
+                    <div id="history-list" class="space-y-4 max-h-52 overflow-y-auto no-scrollbar"></div>
                 </div>
             </div>
+
         </div>
 
         <!-- Navigation Bar -->
         <nav class="fixed bottom-8 left-8 right-8 h-20 glass rounded-[2.5rem] flex items-center justify-around px-2 z-50 border border-white/10 shadow-2xl">
-            <button onclick="showView('home')" class="nav-btn nav-active flex flex-col items-center flex-1 transition-all"><i class="fas fa-house-chimney text-xl"></i><span class="text-[8px] font-black uppercase mt-1">Earn</span></button>
+            <button onclick="showView('home')" class="nav-btn nav-active flex flex-col items-center flex-1 transition-all"><i class="fas fa-bolt-lightning text-xl"></i><span class="text-[8px] font-black uppercase mt-1">Earn</span></button>
             <button onclick="showView('games')" class="nav-btn text-slate-500 flex flex-col items-center flex-1 transition-all"><i class="fas fa-gamepad text-xl"></i><span class="text-[8px] font-black uppercase mt-1">Games</span></button>
-            <button onclick="showView('profile')" class="nav-btn text-slate-500 flex flex-col items-center flex-1 transition-all"><i class="fas fa-users-rays text-xl"></i><span class="text-[8px] font-black uppercase mt-1">Social</span></button>
+            <button onclick="showView('profile')" class="nav-btn text-slate-500 flex flex-col items-center flex-1 transition-all"><i class="fas fa-share-nodes text-xl"></i><span class="text-[8px] font-black uppercase mt-1">Social</span></button>
             <button onclick="showView('wallet')" class="nav-btn text-slate-500 flex flex-col items-center flex-1 transition-all"><i class="fas fa-wallet text-xl"></i><span class="text-[8px] font-black uppercase mt-1">Wallet</span></button>
         </nav>
     </div>
 
-    <!-- Modals -->
+    <!-- Modals (Spin, Scratch, Dice, Math, Payout) -->
     <!-- Spin -->
-    <div id="modal-spin" class="fixed inset-0 z-[2000] bg-slate-950/95 hidden flex flex-col items-center justify-center p-8">
-        <h2 class="text-2xl font-black mb-12 italic uppercase">Fortune Wheel</h2>
-        <div class="relative w-72 h-72 mb-12">
-            <div class="absolute -top-4 left-1/2 -translate-x-1/2 z-10 text-red-500 text-4xl">▼</div>
-            <img src="https://i.ibb.co/31M69Yp/spinner-wheel.png" id="wheel" class="w-full h-full rounded-full">
+    <div id="modal-spin" class="fixed inset-0 z-[2000] bg-slate-950/95 hidden flex flex-col items-center justify-center p-8 backdrop-blur-2xl">
+        <h2 class="text-2xl font-black mb-12 italic uppercase">Lucky Wheel</h2>
+        <div class="relative w-72 h-72 mb-16">
+            <div class="absolute -top-4 left-1/2 -translate-x-1/2 z-10 text-red-500 text-3xl">▼</div>
+            <img src="https://i.ibb.co/31M69Yp/spinner-wheel.png" id="wheel" class="w-full h-full rounded-full border-8 border-indigo-900/30">
         </div>
-        <button onclick="triggerAdBefore('spin')" class="btn-gold w-full max-w-xs py-6 rounded-[2rem] font-black text-xl">SPIN NOW</button>
+        <button id="spin-btn" onclick="triggerAdBefore('spin')" class="btn-gold w-full max-w-xs py-6 rounded-[2rem] font-black text-xl active:scale-95 transition-all">SPIN NOW</button>
         <button onclick="closeModal()" class="mt-8 text-slate-500 text-xs">BACK</button>
     </div>
 
     <!-- Scratch -->
     <div id="modal-scratch" class="fixed inset-0 z-[2000] bg-slate-950/95 hidden flex flex-col items-center justify-center p-8">
-        <h2 class="text-2xl font-black mb-12 italic uppercase">Scratch Card</h2>
+        <h2 class="text-2xl font-black mb-12 italic uppercase">Scratch & Win</h2>
         <div class="scratch-container">
-            <div id="scratch-overlay" onclick="scratchCard()" class="scratch-overlay uppercase">Scratch Me!</div>
-            <div class="scratch-content">
+            <div id="scratch-overlay" onclick="handleScratch()" class="scratch-overlay uppercase">Scratch Me!</div>
+            <div class="scratch-content text-center">
                 <i class="fas fa-gift text-gold text-4xl mb-2"></i>
-                <h3 id="scratch-result" class="text-2xl font-black text-white">0 Coins</h3>
+                <h3 id="scratch-result" class="text-2xl font-black">0 Coins</h3>
             </div>
         </div>
-        <button onclick="closeModal()" class="mt-12 text-slate-500 text-xs uppercase font-bold">Back to Hub</button>
+        <button onclick="closeModal()" class="mt-12 text-slate-500 text-xs uppercase font-bold">Close Hub</button>
+    </div>
+
+    <!-- Dice -->
+    <div id="modal-dice" class="fixed inset-0 z-[2000] bg-slate-950/95 hidden flex flex-col items-center justify-center p-8">
+        <h2 class="text-2xl font-black mb-12 italic uppercase">Lucky Dice</h2>
+        <i id="dice-icon" class="fas fa-dice-one text-indigo-500 text-8xl mb-12"></i>
+        <button onclick="rollDice()" id="dice-btn" class="btn-gold w-full max-w-xs py-5 rounded-3xl font-black text-lg">ROLL NOW</button>
+        <button onclick="closeModal()" class="mt-10 text-slate-500 text-xs">BACK</button>
+    </div>
+
+    <!-- Math Quiz -->
+    <div id="modal-math" class="fixed inset-0 z-[2000] bg-slate-950/95 hidden flex flex-col items-center justify-center p-8">
+        <div class="glass p-12 rounded-[3.5rem] w-full max-w-sm text-center">
+            <h2 id="math-q" class="text-6xl font-black mb-12 tracking-tighter">? + ?</h2>
+            <input type="number" id="math-ans" placeholder="?" class="w-full bg-slate-900 border border-white/5 p-6 rounded-3xl text-center text-3xl text-white font-black mb-10 outline-none focus:border-indigo-500">
+            <button onclick="verifyMath()" class="w-full btn-gold py-5 rounded-2xl font-black text-lg">SUBMIT</button>
+        </div>
+        <button onclick="closeModal()" class="mt-10 text-slate-500 text-xs font-black uppercase">Back</button>
+    </div>
+
+    <!-- Payout -->
+    <div id="modal-payout" class="fixed inset-0 z-[2000] bg-slate-950/95 hidden flex flex-col items-center justify-center p-8">
+        <div class="glass p-10 rounded-[3rem] w-full max-w-sm text-center">
+            <h2 class="text-2xl font-black mb-10 uppercase italic">Withdraw</h2>
+            <select id="payout-type" class="w-full bg-slate-900 p-5 rounded-2xl text-white font-bold mb-5 outline-none border border-white/10">
+                <option value="UPI">UPI (GPay / PhonePe)</option>
+                <option value="BKASH">BKASH (Personal)</option>
+            </select>
+            <input type="text" id="payout-id" placeholder="Wallet ID / Number" class="w-full bg-slate-900 border border-white/5 p-5 rounded-2xl mb-10 text-center text-white font-black outline-none focus:border-indigo-500 text-sm">
+            <button onclick="submitPayout()" class="w-full btn-gold py-6 rounded-[2rem] font-black uppercase tracking-widest">Confirm Request</button>
+        </div>
+        <button onclick="closeModal()" class="mt-10 text-slate-500 text-xs font-black uppercase">Cancel</button>
     </div>
 
     <!-- AD Simulator Overlay -->
     <div id="ad-overlay" class="fixed inset-0 bg-black z-[3000] hidden flex flex-col items-center justify-center p-12 text-center">
-        <h2 class="text-xl font-black mb-4 uppercase italic">Loading Sponsor Ad</h2>
-        <div class="text-indigo-400 font-black text-4xl" id="ad-countdown">15</div>
+        <h2 class="text-xl font-black mb-4 uppercase italic">Loading Video Ad</h2>
+        <p class="text-slate-400 text-sm leading-relaxed mb-10">Do not close this window while we verify your rewards.</p>
+        <div class="text-indigo-400 font-black text-5xl" id="ad-countdown">15</div>
     </div>
 
-    <div id="toast" class="fixed top-12 left-1/2 -translate-x-1/2 z-[5000] px-10 py-4 rounded-full bg-indigo-600 text-white font-black text-xs shadow-2xl opacity-0 transition-all pointer-events-none uppercase">Success!</div>
+    <div id="toast" class="fixed top-12 left-1/2 -translate-x-1/2 z-[5000] px-10 py-4 rounded-full bg-indigo-600 text-white font-black text-xs shadow-2xl opacity-0 transition-all uppercase pointer-events-none tracking-widest">SUCCESS!</div>
 
     <script>
         // --- 1. FIREBASE CONFIG ---
@@ -212,11 +275,16 @@
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth(), db = firebase.firestore();
 
-        let currentUser = null, userData = { coins: 0, lvl: 1, doneTasks: [], lastDaily: 0, referralCode: "---", streak: 0 };
+        let currentUser = null, userData = { coins: 0, lvl: 1, xp: 0, doneTasks: [], lastDaily: 0, referralCode: "---", streak: 0, withdrawals: [] };
         
-        const TASKS_DB = Array.from({length: 50}, (_, i) => ({ id: i + 1, title: `Elite Mission #${i+1}`, reward: 15, link: 'https://google.com' }));
+        const TASKS_DB = Array.from({length: 50}, (_, i) => ({
+            id: i + 1,
+            title: i % 3 === 0 ? `Premium Ad #${i+1}` : (i % 2 === 0 ? `Follow Pro #${i+1}` : `Visit Web #${i+1}`),
+            reward: 15 + (i % 5),
+            type: i % 3 === 0 ? 'video' : (i % 2 === 0 ? 'social' : 'web')
+        }));
 
-        // --- 2. AUTH LOGIC ---
+        // --- 2. AUTHENTICATION ---
         async function loginWithGoogle() {
             const provider = new firebase.auth.GoogleAuthProvider();
             auth.signInWithRedirect(provider);
@@ -241,9 +309,10 @@
                 if (!refQuery.empty) {
                     await db.collection('users').doc(refQuery.docs[0].id).update({ coins: firebase.firestore.FieldValue.increment(500) });
                     startCoins = 100;
+                    showToast("Referral Applied! +100 Coins");
                 }
             }
-            const data = { uid: currentUser.uid, displayName: currentUser.displayName, photoURL: currentUser.photoURL, coins: startCoins, lvl: 1, doneTasks: [], lastDaily: 0, streak: 0, referralCode: Math.random().toString(36).substring(2, 8).toUpperCase(), history: [] };
+            const data = { uid: currentUser.uid, displayName: currentUser.displayName, photoURL: currentUser.photoURL, coins: startCoins, lvl: 1, xp: 0, doneTasks: [], lastDaily: 0, streak: 0, referralCode: Math.random().toString(36).substring(2, 8).toUpperCase(), history: [], withdrawals: [] };
             await db.collection('users').doc(currentUser.uid).set(data);
             document.getElementById('modal-referral-setup').classList.add('hidden');
             initApp(data);
@@ -260,44 +329,139 @@
                 document.getElementById('user-avatar').src = userData.photoURL;
                 document.getElementById('ref-code').innerText = userData.referralCode;
                 db.collection('users').doc(currentUser.uid).onSnapshot(doc => { if(doc.exists) { userData = doc.data(); updateUI(); } });
-                renderTasks();
+                renderTasks('video');
             }, 700);
         }
 
         function updateUI() {
             document.getElementById('balance').innerText = userData.coins;
             document.getElementById('cash').innerText = (userData.coins / 100).toFixed(2);
-            document.getElementById('task-prog').innerText = `${userData.doneTasks.length}/50 DONE`;
-            
-            // Badge Update
-            const badge = document.getElementById('user-badge');
-            if(userData.coins > 10000) badge.innerText = "💎 Diamond Member";
-            else if(userData.coins > 5000) badge.innerText = "🏆 Gold Member";
-            else if(userData.coins > 1000) badge.innerText = "⭐ Silver Member";
+            document.getElementById('est-earning').innerText = (userData.coins / 100).toFixed(2);
+            document.getElementById('done-count').innerText = `${userData.doneTasks.length}/50`;
+            document.getElementById('lvl').innerText = userData.lvl;
+            document.getElementById('xp-bar').style.width = userData.xp + '%';
+            document.getElementById('streak-info').innerText = `Day ${userData.streak + 1} / 7 Streak`;
 
             const wBtn = document.getElementById('withdraw-btn');
             if(userData.coins >= 2000) { wBtn.classList.replace('bg-slate-900', 'btn-gold'); wBtn.classList.replace('text-slate-600', 'text-white'); }
+            
+            // Member Status Badge
+            const badge = document.getElementById('user-badge');
+            if(userData.lvl > 10) badge.innerText = "💎 Diamond Elite";
+            else if(userData.lvl > 5) badge.innerText = "🏆 Gold Member";
+            else badge.innerText = "⭐ Bronze Member";
+
+            renderHistory();
+            if(userData.xp >= 100) { db.collection('users').doc(currentUser.uid).update({ lvl: firebase.firestore.FieldValue.increment(1), xp: 0 }); showToast("Level Up! 🎊"); }
         }
 
-        function renderTasks() {
-            const available = TASKS_DB.filter(t => !userData.doneTasks.includes(t.id));
+        function renderTasks(cat) {
+            const btns = document.querySelectorAll('.task-tab-btn');
+            btns.forEach(b => { b.classList.replace('bg-indigo-600', 'bg-slate-900'); b.classList.add('text-slate-500'); });
+            event?.target.classList.replace('bg-slate-900', 'bg-indigo-600');
+            event?.target.classList.remove('text-slate-500');
+
+            const available = TASKS_DB.filter(t => !userData.doneTasks.includes(t.id) && t.type === cat);
             document.getElementById('task-list').innerHTML = available.slice(0, 10).map(t => `
-                <div class="glass p-5 rounded-[2rem] flex items-center justify-between border-l-4 border-indigo-500">
-                    <div><h4 class="text-xs font-black uppercase italic">${t.title}</h4><p class="text-[9px] text-slate-500 font-bold">+${t.reward} COINS</p></div>
-                    <button onclick="runTaskProcess(${t.id}, ${t.reward})" class="bg-indigo-600 px-6 py-3 rounded-2xl text-[9px] font-black uppercase tracking-widest active:scale-90 transition-all">Start</button>
-                </div>`).join('') || '<p class="text-center py-10 uppercase text-slate-600 font-black">All Tasks Completed!</p>';
+                <div class="task-card glass p-5 rounded-[2rem] flex items-center justify-between border-l-4 border-indigo-500">
+                    <div><h4 class="text-xs font-black uppercase italic">${t.title}</h4><p class="text-[9px] text-slate-500 font-bold uppercase">+${t.reward} COINS</p></div>
+                    <button onclick="runTask(${t.id}, ${t.reward})" class="bg-indigo-600 px-6 py-3 rounded-2xl text-[9px] font-black uppercase active:scale-90 transition-all">Start</button>
+                </div>`).join('') || '<p class="text-center py-10 uppercase text-slate-600 font-black">Category Cleared!</p>';
         }
 
-        async function runTaskProcess(id, reward) {
+        async function runTask(id, reward) {
             window.open('https://google.com', '_blank');
             if(await simulateAd(15)) {
                 await db.collection('users').doc(currentUser.uid).update({ 
                     coins: firebase.firestore.FieldValue.increment(reward),
+                    xp: firebase.firestore.FieldValue.increment(15),
                     doneTasks: firebase.firestore.FieldValue.arrayUnion(id),
-                    history: firebase.firestore.FieldValue.arrayUnion({ type: `Task #${id}`, amt: reward, at: Date.now() }) 
+                    history: firebase.firestore.FieldValue.arrayUnion({ type: `Task #${id}`, amt: reward, at: Date.now() })
                 });
-                showToast(`Task Complete! +${reward}`);
+                showToast("Task Verified!");
             }
+        }
+
+        // --- 3. GAMES LOGIC ---
+        let mathSol = 0;
+        function genMath() { const a = Math.floor(Math.random()*25), b = Math.floor(Math.random()*25); mathSol = a+b; document.getElementById('math-q').innerText = `${a} + ${b}`; }
+        function verifyMath() { if(parseInt(document.getElementById('math-ans').value) === mathSol) { addReward(8, "Math Quiz"); document.getElementById('math-ans').value = ""; closeModal(); } else showToast("Wrong Answer!", "err"); }
+
+        function rollDice() {
+            const diceIcons = ['fa-dice-one', 'fa-dice-two', 'fa-dice-three', 'fa-dice-four', 'fa-dice-five', 'fa-dice-six'];
+            document.getElementById('dice-btn').disabled = true;
+            let rollCount = 0;
+            const itv = setInterval(() => {
+                document.getElementById('dice-icon').className = `fas ${diceIcons[Math.floor(Math.random()*6)]} text-indigo-500 text-8xl mb-12`;
+                rollCount++;
+                if(rollCount > 10) {
+                    clearInterval(itv);
+                    const final = Math.floor(Math.random()*6);
+                    document.getElementById('dice-icon').className = `fas ${diceIcons[final]} text-indigo-500 text-8xl mb-12`;
+                    addReward(final + 5, "Dice Roll");
+                    document.getElementById('dice-btn').disabled = false;
+                    setTimeout(closeModal, 1500);
+                }
+            }, 100);
+        }
+
+        function handleScratch() {
+            const overlay = document.getElementById('scratch-overlay');
+            const win = Math.floor(Math.random() * 20) + 5;
+            document.getElementById('scratch-result').innerText = win + " Coins";
+            overlay.style.opacity = '0';
+            setTimeout(async () => { overlay.style.pointerEvents = 'none'; addReward(win, "Scratch Win"); }, 500);
+        }
+
+        async function triggerAdBefore(game) { if(await simulateAd(10)) { if(game === 'spin') playSpin(); } }
+
+        function playSpin() {
+            const deg = 3600 + Math.floor(Math.random()*3600); document.getElementById('wheel').style.transform = `rotate(${deg}deg)`;
+            setTimeout(() => {
+                const win = [10, 20, 50, 0, 100, 5][Math.floor(Math.random()*6)];
+                if(win > 0) addReward(win, "Spin Reward"); else showToast("Better Luck!", "err");
+                closeModal();
+            }, 4000);
+        }
+
+        // --- 4. CORE HELPERS ---
+        async function addReward(amt, type) {
+            await db.collection('users').doc(currentUser.uid).update({ 
+                coins: firebase.firestore.FieldValue.increment(amt),
+                xp: firebase.firestore.FieldValue.increment(15),
+                history: firebase.firestore.FieldValue.arrayUnion({ type, amt, at: Date.now() })
+            });
+            showToast(`+${amt} Coins Received!`);
+        }
+
+        async function submitPayout() {
+            const id = document.getElementById('payout-id').value.trim();
+            if(!id) return alert("Enter Payment Address");
+            const amt = userData.coins;
+            if(amt < 2000) return showToast("Min ₹20 Required!", "err");
+            
+            const withdrawal = { id: Date.now(), amount: amt, type: document.getElementById('payout-type').value, address: id, status: 'pending', at: Date.now() };
+            await db.collection('users').doc(currentUser.uid).update({ 
+                coins: 0, 
+                withdrawals: firebase.firestore.FieldValue.arrayUnion(withdrawal) 
+            });
+            closeModal(); showToast("Payout Requested!");
+        }
+
+        function renderHistory() {
+            const list = document.getElementById('history-list');
+            const historyHTML = (userData.withdrawals || []).reverse().map(w => `
+                <div class="flex justify-between items-center bg-white/5 p-4 rounded-2xl">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-2 h-2 rounded-full ${w.status === 'pending' ? 'bg-yellow-500 animate-pulse' : 'bg-green-500'}"></div>
+                        <div>
+                            <p class="text-[10px] font-black uppercase tracking-widest">${w.type} Payout</p>
+                            <p class="text-[8px] text-slate-500">${new Date(w.at).toLocaleDateString()}</p>
+                        </div>
+                    </div>
+                    <span class="${w.status === 'pending' ? 'text-yellow-500' : 'text-green-500'} font-black text-xs">₹${(w.amount/100).toFixed(0)}</span>
+                </div>`).join('');
+            list.innerHTML = historyHTML || '<p class="text-center text-slate-600 text-xs py-4">No Withdrawal Records</p>';
         }
 
         function simulateAd(sec) {
@@ -308,57 +472,19 @@
             });
         }
 
-        async function triggerAdBefore(game) { if(await simulateAd(10)) { if(game === 'spin') playSpin(); } }
-
-        function scratchCard() {
-            const overlay = document.getElementById('scratch-overlay');
-            const win = Math.floor(Math.random() * 25) + 5;
-            document.getElementById('scratch-result').innerText = win + " Coins";
-            overlay.style.opacity = '0';
-            setTimeout(async () => {
-                overlay.style.pointerEvents = 'none';
-                await db.collection('users').doc(currentUser.uid).update({
-                    coins: firebase.firestore.FieldValue.increment(win),
-                    history: firebase.firestore.FieldValue.arrayUnion({ type: "Scratch Win", amt: win, at: Date.now() })
-                });
-                showToast(`Success! +${win} Coins.`);
-            }, 500);
-        }
-
         async function claimDaily() {
             const now = Date.now();
             if(now - userData.lastDaily < 86400000) return showToast("Locked for 24h!", "err");
             const streakBonus = (userData.streak >= 6) ? 500 : 50;
-            await db.collection('users').doc(currentUser.uid).update({ 
-                lastDaily: now, 
-                coins: firebase.firestore.FieldValue.increment(streakBonus),
-                streak: (userData.streak >= 6) ? 0 : firebase.firestore.FieldValue.increment(1) 
-            });
-            showToast(`Daily Reward Claimed: +${streakBonus}`);
+            await db.collection('users').doc(currentUser.uid).update({ lastDaily: now, streak: (userData.streak >= 6) ? 0 : firebase.firestore.FieldValue.increment(1) });
+            addReward(streakBonus, "Daily Streak");
         }
 
-        function playSpin() {
-            const deg = 3600 + Math.floor(Math.random()*3600); document.getElementById('wheel').style.transform = `rotate(${deg}deg)`;
-            setTimeout(async () => {
-                const win = [10, 20, 50, 0, 100, 5][Math.floor(Math.random()*6)];
-                await db.collection('users').doc(currentUser.uid).update({ coins: firebase.firestore.FieldValue.increment(win) });
-                showToast(`Won ${win} Coins!`); closeModal();
-            }, 4000);
-        }
-
-        async function applyPromoCode() {
-            const code = document.getElementById('promo-input').value.toUpperCase();
-            if(code === "WELCOME500") {
-                await db.collection('users').doc(currentUser.uid).update({ coins: firebase.firestore.FieldValue.increment(500) });
-                showToast("Promo Code Applied: +500!");
-                document.getElementById('promo-input').value = "";
-            } else { showToast("Invalid Code!", "err"); }
-        }
-
-        function showView(v) { document.querySelectorAll('.view').forEach(view => view.classList.add('hidden')); document.getElementById('view-' + v).classList.remove('hidden'); document.querySelectorAll('.nav-btn').forEach(b => b.classList.replace('nav-active', 'text-slate-500')); event.currentTarget.classList.add('nav-active'); }
-        function openGame(g) { document.getElementById('modal-' + g).classList.remove('hidden'); if(g==='scratch') { document.getElementById('scratch-overlay').style.opacity='1'; document.getElementById('scratch-overlay').style.pointerEvents='auto'; } }
+        function showView(v) { document.querySelectorAll('.view').forEach(view => view.classList.add('hidden')); document.getElementById('view-' + v).classList.remove('hidden'); document.querySelectorAll('.nav-btn').forEach(b => b.classList.replace('nav-active', 'text-slate-500')); event.currentTarget.classList.add('nav-active'); if (window.navigator.vibrate) window.navigator.vibrate(20); }
+        function openGame(g) { if(g === 'math') genMath(); if(g==='scratch'){ document.getElementById('scratch-overlay').style.opacity='1'; document.getElementById('scratch-overlay').style.pointerEvents='auto'; } document.getElementById('modal-' + g).classList.remove('hidden'); }
         function closeModal() { document.querySelectorAll('[id^="modal-"]').forEach(m => m.classList.add('hidden')); }
         function showToast(msg, type="success") { const t = document.getElementById('toast'); t.innerText = msg; t.style.backgroundColor = type === "success" ? "#4f46e5" : "#ef4444"; t.style.opacity = "1"; setTimeout(() => { t.style.opacity = "0"; }, 2500); }
+        function copyRef() { navigator.clipboard.writeText(userData.referralCode); showToast("Code Copied!"); }
     </script>
 </body>
 </html>
